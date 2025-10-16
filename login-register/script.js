@@ -32,3 +32,15 @@ function resetForms() {
 function handleLogin() {
   resetForms(); // limpia los campos del login
 }
+
+function validateForm() {
+  const registerBtn = document.getElementById("registerBtn");
+
+  registerBtn.classList.add("success");
+
+  // Termina la animacion y redirige al home.
+  setTimeout(() => {
+    registerBtn.classList.remove("success");
+    window.location.href = "../home/home.html";
+  }, 1200);
+}
