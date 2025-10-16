@@ -7,13 +7,12 @@
 }
 
 body {
+  scrollbar-width: none;
   max-width: 100%;
-  overflow-x: hidden;
   background-color: #2C2A2C;
 }
 html, body {
   max-width: 100%;
-  overflow-x: hidden; /* previene scroll horizontal */
 }
 /*----------Header Styles---------*/
 
@@ -41,6 +40,10 @@ html, body {
   filter: brightness(1.5);
   transform: scale(1.10);
   transition: 0.2s ease;
+}
+
+.pageName {
+  text-decoration: none;
 }
 
 
@@ -326,7 +329,7 @@ padding-right: 2%;
 }
 .comment p{
   color: #fff;
-  margin-left: 1%;
+  margin-left: 45px;
   font-weight: 10;
 }
 .buttons{

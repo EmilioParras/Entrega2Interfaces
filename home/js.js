@@ -5,10 +5,13 @@ const LOADING = document.getElementById("loading-screen")
 function getGames(done) {
   fetch(API_URL)
     .then((response) => response.json())
-    .then((games) => done(games))
+    .then((games) => {
+      console.log(games) 
+      done(games)  
+    })
     .catch((err) => {
       LOADING.textContent = "Error loading games."
-      console.error(err)
+      console.error("Error al cargar los juegos:", err)
     })
 }
 
@@ -17,7 +20,7 @@ function createCard(game) {
   gameCard.classList.add("game-card")
 
   gameCard.innerHTML = `
-        <img src="${game.background_image}" alt="${game.name}">
+        <img src="${game.background_image_low_res}" alt="${game.name}">
         <p>${game.name}</p>
     `
 
@@ -28,22 +31,22 @@ function createSection(genreName) {
   const section = document.createElement("section")
   section.classList.add("genre-section")
 
-  section.innerHTML = `
-        <h2>${genreName}</h2>
-        <div class="carousel-section">
+  section.innerHTML = 
+        `
+          <h2>${genreName}</h2>
+          <div class="carousel-section">
             <button class="carousel-btn btn-left">&#8249;</button>
-            <div class="carousel" id="carousel-${genreName.toLowerCase().replace(/\s+/g, "-")}"></div>
+            <div class="carousel" id="carousel-${genreName.toLowerCase()}"></div>
             <button class="carousel-btn btn-right">&#8250;</button>
-        </div>
-    `
-
+          </div>
+        `
   return section
 }
 
 getGames((games) => {
   const genresMap = {}
 
-  // --- Agrupa los juegos por genero. ---
+  // --- Agrupo los juegos por genero. ---
   games.forEach((game) => {
     game.genres.forEach((genre) => {
       if (!genresMap[genre.name]) {
@@ -53,7 +56,7 @@ getGames((games) => {
     })
   })
 
-  // --- Por cada genero crea una seccion. ---
+  // --- Por cada genero creo una seccion. ---
   Object.keys(genresMap).forEach((genreName) => {
     const section = createSection(genreName)
     MAIN_CONTENT.appendChild(section)
@@ -68,32 +71,28 @@ getGames((games) => {
       carousel.appendChild(createCard(game))
     })
 
-    function ejecutarAnimacion() {
-      const cards = carousel.querySelectorAll(".game-card")
+  function ejecutarAnimacion() {
+    const cards = carousel.querySelectorAll(".game-card")
 
-      cards.forEach((card) => {
-        // Remove animation class first to reset
+    cards.forEach((card) => {
+      card.classList.remove("animate")
+      void card.offsetWidth
+      card.classList.add("animate")
+
+      setTimeout(() => {
         card.classList.remove("animate")
-        // Force reflow to restart animation
-        void card.offsetWidth
-        // Add animation class
-        card.classList.add("animate")
-
-        // Remove animation class after it completes
-        setTimeout(() => {
-          card.classList.remove("animate")
-        }, 600)
-      })
-    }
+      }, 600)
+    })
+  }
 
     const scrollAmount = 1000
     leftBtn.addEventListener("click", () => {
       carousel.scrollBy({ left: -scrollAmount, behavior: "smooth" })
-      setTimeout(ejecutarAnimacion, 100)
+      ejecutarAnimacion();
     })
     rightBtn.addEventListener("click", () => {
       carousel.scrollBy({ left: scrollAmount, behavior: "smooth" })
-      setTimeout(ejecutarAnimacion, 100)
+      ejecutarAnimacion();
     })
   })
 })
