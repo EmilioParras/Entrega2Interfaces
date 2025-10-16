@@ -105,22 +105,33 @@ const friendsBtn = document.getElementById("friends-button");
 const hamburguerSection = document.querySelector(".hamburguer-section");
 const friendsSection = document.querySelector(".friends-section");
 const mainContent = document.querySelector(".main-content-wrapper");
+const footer = document.querySelector(".footer-links-section");
+const rigthsReserved = document.querySelector(".footer-rigths-reserved");
 
 function updateMainLayout() {
   const leftVisible = !hamburguerSection.classList.contains("hamburguer-hidden");
   const rightVisible = !friendsSection.classList.contains("friends-hidden");
 
-  mainContent.classList.remove("expand-left", "expand-right", "none-expand");
+  mainContent.classList.remove("expand-left", "expand-right", "expand-none", "expand-both");
+  footer.classList.remove("expand-left", "expand-right", "expand-none", "expand-both");
+  rigthsReserved.classList.remove("expand-left", "expand-right", "expand-none",  "expand-both");
 
   if (!leftVisible && !rightVisible) {
-    mainContent.classList.add("none-expand");
-  } else if (!leftVisible && rightVisible) {
+    mainContent.classList.add("expand-none");
+    footer.classList.add("expand-none");
+    rigthsReserved.classList.add("expand-none");
+  } else if (!leftVisible && rightVisible) {    
     mainContent.classList.add("expand-right");
+    footer.classList.add("expand-right");
+    rigthsReserved.classList.add("expand-right");
   } else if (leftVisible && !rightVisible) {
     mainContent.classList.add("expand-left");
+    footer.classList.add("expand-left");
+    rigthsReserved.classList.add("expand-left");
   } else if (leftVisible && rightVisible){
-    mainContent.classList.add("expand-left");
-    mainContent.classList.add("expand-right");
+    mainContent.classList.add("expand-both");
+    footer.classList.add("expand-both")
+    rigthsReserved.classList.add("expand-both");
   }
 }
 
