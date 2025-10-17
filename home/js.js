@@ -71,16 +71,28 @@ getGames((games) => {
       carousel.appendChild(createCard(game))
     })
 
-  function ejecutarAnimacion() {
+  function ejecutarAnimacionLeft() {
     const cards = carousel.querySelectorAll(".game-card")
 
     cards.forEach((card) => {
-      card.classList.remove("animate")
       void card.offsetWidth
-      card.classList.add("animate")
+      card.classList.add("animate-left")
 
       setTimeout(() => {
-        card.classList.remove("animate")
+        card.classList.remove("animate-left")
+      }, 600)
+    })
+  }
+
+  function ejecutarAnimacionRight() {
+    const cards = carousel.querySelectorAll(".game-card")
+
+    cards.forEach((card) => {
+      void card.offsetWidth
+      card.classList.add("animate-right")
+
+      setTimeout(() => {
+        card.classList.remove("animate-right")
       }, 600)
     })
   }
@@ -88,11 +100,11 @@ getGames((games) => {
     const scrollAmount = 1000
     leftBtn.addEventListener("click", () => {
       carousel.scrollBy({ left: -scrollAmount, behavior: "smooth" })
-      ejecutarAnimacion();
+      ejecutarAnimacionLeft();
     })
     rightBtn.addEventListener("click", () => {
       carousel.scrollBy({ left: scrollAmount, behavior: "smooth" })
-      ejecutarAnimacion();
+      ejecutarAnimacionRight();
     })
   })
 })
