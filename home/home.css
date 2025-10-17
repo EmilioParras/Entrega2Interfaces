@@ -580,6 +580,7 @@ footer {
 
 /* ---- Derechos reservados ---- */
 .footer-rigths-reserved {
+  transition: all 0.5s ease;
   padding-top: 20px;
   display: flex;
   justify-content: space-between;
@@ -588,6 +589,7 @@ footer {
 }
 
 .footer-icons {
+  transition: all 0.5s ease;
   display: flex;
   gap: 15px;
 }
