@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
+    <title>Blocka</title>
     <link rel="stylesheet" href="blocka.css">
     <link href="https://fonts.cdnfonts.com/css/jetbrains-mono" rel="stylesheet">
 </head>
@@ -24,36 +24,58 @@
         </div>
     </header>
 
-    <main>
-
-        <aside class="hamburguer-section hamburguer-hidden">
-            <div class="hamb-categories">
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/home.png" alt=""> Home</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/morePlayed.png" alt=""> More played</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/lastPlayed.png" alt=""> Last played</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/recentlyUpdated.png" alt=""> Recently updated</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/moreLiked.png" alt=""> More liked</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/favorites.png" alt=""> Favorites</p>
-                <div class="divisor"></div>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/espada.png" alt="icon"> Action</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/senderismo.png" alt="icon"> Adventure</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/baloncesto.png" alt="icon"> Basketball</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/control-del-juego.png" alt="icon"> Casual</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/cocina.png" alt="icon"> Cook</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/dados.png" alt="icon"> Dice</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/puerta.png" alt="icon"> Escape</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/multiplayer.png" alt="icon"> Multiplayer</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/races.png" alt="icon"> Races</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/rpg.png" alt="icon"> Rpg</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/deportes.png" alt="icon"> Sports</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/stickman.png" alt="icon"> Stickman</p>
-                <p class="categorie"> <img src="Images/Icons/CategorieIcons/terror.png" alt="icon"> Terror</p>
-            </div>
-        </aside>
     
-        <div class="main-content">
+    <aside class="hamburguer-section hamburguer-hidden">
+        <div class="hamb-categories">
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/home.png" alt=""> Home</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/morePlayed.png" alt=""> More played</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/lastPlayed.png" alt=""> Last played</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/recentlyUpdated.png" alt=""> Recently updated</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/moreLiked.png" alt=""> More liked</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/favorites.png" alt=""> Favorites</p>
+            <div class="divisor"></div>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/espada.png" alt="icon"> Action</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/senderismo.png" alt="icon"> Adventure</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/baloncesto.png" alt="icon"> Basketball</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/control-del-juego.png" alt="icon"> Casual</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/cocina.png" alt="icon"> Cook</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/dados.png" alt="icon"> Dice</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/puerta.png" alt="icon"> Escape</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/multiplayer.png" alt="icon"> Multiplayer</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/races.png" alt="icon"> Races</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/rpg.png" alt="icon"> Rpg</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/deportes.png" alt="icon"> Sports</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/stickman.png" alt="icon"> Stickman</p>
+            <p class="categorie"> <img src="Images/Icons/CategorieIcons/terror.png" alt="icon"> Terror</p>
+        </div>
+    </aside>
+    <main>
+    
+        <div class="main-blocka" id="main-blocka">
+            <div class="game-execution">
+                <div class="game-center-info">
+                    <div class="game-image">
+                        <img src="./images/imageLevels/gameImage.jpg" alt="gameImage">
+                    </div>
+                    <p>Blockatman!</p>
+                    <button class="play-button">JUGAR</button>
+                </div>
+            </div>
+        <div class="game-info-buttons">
+            <div class="game-info-name">
+                <p>Blockatman!</p>
+            </div>
+            <div class="game-buttons-section">
+                <img src="./images/Icons/like.png" alt="like" class="game-info-button">
+                <img src="./images/Icons/dislike.png" alt="dislike" class="game-info-button">
+                <img src="./images/Icons/fullScreen.png" alt="fullScreen" class="game-info-button">
+                <img src="./images/Icons/CategorieIcons/favorites.png" alt="favGame" class="game-info-button">
+            </div>
 
         </div>
+        </div>
+
+    </main>
 
         <aside class="friends-section friends-hidden">
             <h3>Friends</h3>
@@ -79,7 +101,6 @@
             </div>
         </aside>
 
-    </main>
 
     <script src="blocka.js"></script>
 </body>
