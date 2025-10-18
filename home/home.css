@@ -66,6 +66,7 @@ main {
 /*--- Hamburguer ---*/
 .hamburguer-section {
   width: 15%;
+  top: 45px;
   height: 100vh;
   position: fixed;
   background-color: #1a181b;
@@ -211,6 +212,9 @@ main {
 
 /*--- Configuration---*/
 .config-section {
+  right: 0; 
+  top: 45px;
+  background-color: #1a181b;
   padding: 5px;
   display: flex;
   flex-direction: column;
@@ -240,12 +244,19 @@ main {
   display: flex;
   flex-direction: row;
   gap: 30px;
+  transition: all 0.5s ease;
 }
 
 .c-section img {
   height: 30px;
   width: auto;
 }
+
+.c-section:hover {
+  scale: calc(1.05);
+  background-color: #202020;
+}
+
 
 /*========= FOOTER ==========*/
 footer {
@@ -521,19 +532,23 @@ body::-webkit-scrollbar {
   }
 }
 
-/*--- Friends ---*/
+/*--- Configuration ---*/
 
 .config-section {
   width: 15%;
   height: 100vh;
-  background-color: #1a181b;
-  right: 0;
   position: fixed;
   display: flex;
   flex-direction: column;
   border-left: 1px solid black;
   transition: all 0.5s ease;
   padding: 10px;
+}
+
+.c-section:hover {
+    color: #26EE00;
+    background-color: rgba(38, 238, 0, 0.1);
+    transform: translateX(3px);   
 }
 
 
