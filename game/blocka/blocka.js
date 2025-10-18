@@ -2,7 +2,7 @@ const hamburguerBtn = document.getElementById("hamburguer-button");
 const friendsBtn = document.getElementById("friends-button");
 const hamburguerSection = document.querySelector(".hamburguer-section");
 const friendsSection = document.querySelector(".friends-section");
-const mainContent = document.querySelector(".main-content-wrapper");
+const mainContent = document.querySelector("main");
 
 function updateMainLayout() {
   const leftVisible = !hamburguerSection.classList.contains("hamburguer-hidden");
