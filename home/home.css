@@ -209,40 +209,42 @@ main {
   text-align: center;
 }
 
-/*--- Friends---*/
-.friends-section {
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid black;
-    transition: all 0.5s ease;
+/*--- Configuration---*/
+.config-section {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid black;
+  transition: all 0.5s ease;
 }
 
-.friends {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.config-section h3 {
+  font-size: 16px;
+  color: #26ee00;
 }
 
-.friend {
-    padding-top: 5px;
-    padding: 3px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    overflow-x: hidden;
+.config-sections {
+  padding-top: 10px;
+  gap: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.friend img {
-    height: 20px;
-    width: auto;
+.c-section {
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
 }
 
-.tag {
-    font-size: 10px;
-    color: #25b00a;
+.c-section img {
+  height: 30px;
+  width: auto;
 }
 
 /*========= FOOTER ==========*/
@@ -521,7 +523,7 @@ body::-webkit-scrollbar {
 
 /*--- Friends ---*/
 
-.friends-section {
+.config-section {
   width: 15%;
   height: 100vh;
   background-color: #1a181b;
@@ -534,23 +536,6 @@ body::-webkit-scrollbar {
   padding: 10px;
 }
 
-.friends-section h3 {
-  font-size: 20px;
-}
-
-.friend:hover {
-  transform: scale(1.05);
-  transition: 0.250ms ease-in-out;
-}
-
-.friend img {
-  height: 30px;
-  width: auto;
-}
-
-.tag {
-  font-size: 22px;
-}
 
 /*===== Footer =====*/
 footer {
@@ -620,7 +605,7 @@ footer {
   opacity: 0;
 }
 
-.friends-hidden {
+.config-hidden {
   transform: translateX(100%);
   width: 0;
   padding: 0;
