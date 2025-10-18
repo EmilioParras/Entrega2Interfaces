@@ -113,16 +113,16 @@ getGames((games) => {
 /*==== Abrir y cerrar paneles laterales===== */
 
 const hamburguerBtn = document.getElementById("hamburguer-button");
-const friendsBtn = document.getElementById("friends-button");
+const configBtn = document.getElementById("config-button");
 const hamburguerSection = document.querySelector(".hamburguer-section");
-const friendsSection = document.querySelector(".friends-section");
+const configSection = document.querySelector(".config-section");
 const mainContent = document.querySelector(".main-content-wrapper");
 const footer = document.querySelector(".footer-links-section");
 const rigthsReserved = document.querySelector(".footer-rigths-reserved");
 
 function updateMainLayout() {
   const leftVisible = !hamburguerSection.classList.contains("hamburguer-hidden");
-  const rightVisible = !friendsSection.classList.contains("friends-hidden");
+  const rightVisible = !configSection.classList.contains("config-hidden");
 
   mainContent.classList.remove("expand-left", "expand-right", "expand-none", "expand-both");
   footer.classList.remove("expand-left", "expand-right", "expand-none", "expand-both");
@@ -152,8 +152,8 @@ hamburguerBtn.addEventListener("click", () => {
   updateMainLayout();
 });
 
-friendsBtn.addEventListener("click", () => {
-  friendsSection.classList.toggle("friends-hidden");
+configBtn.addEventListener("click", () => {
+  configSection.classList.toggle("config-hidden");
   updateMainLayout();
 });
 
