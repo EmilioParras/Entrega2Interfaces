@@ -546,9 +546,9 @@ body::-webkit-scrollbar {
 }
 
 .c-section:hover {
-    color: #26EE00;
-    background-color: rgba(38, 238, 0, 0.1);
-    transform: translateX(3px);   
+  color: #26EE00;
+  background-color: rgba(38, 238, 0, 0.1);
+  transform: translateX(3px);   
 }
 
 

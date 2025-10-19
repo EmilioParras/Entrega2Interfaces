@@ -85,6 +85,7 @@ header {
 main {
   margin-top: 50px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   transition: all 0.5s ease;
 }
@@ -209,30 +210,24 @@ main {
 
 .game-info-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   width: 100%;
   height: 10%;
   background-color: #221C24;
-  padding: 10px;
-}
-
-.game-info-name {
-  color: white;
-  font-size: 20px;
+  padding-right: 10px;
 }
 
 .game-buttons-section {
-  height: 100%;
+  height: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
   gap: 20px;
 }
 
 .game-info-button {
-  height: 90%;
+  height: 80%;
   width: auto;
   transition: all 0.5s ease;
 }
@@ -241,55 +236,168 @@ main {
   transform: scale(1.1);
 }
 
-/*--- Friends---*/
-.friends-section {
-  width: 15%;
-  height: 100vh;
+.details-recomended {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.game-details-section {
+  border-radius: 5px;
   background-color: #1a181b;
-  right: 0;
-  top: 45px;
-  position: fixed;
+  width: 100%;
+  gap: 30px;
+  display: flex;
   flex-direction: column;
-  border-left: 1px solid black;
-  transition: all 0.5s ease;
   padding: 10px;
 }
 
-.friends-section h3 {
+.breadcrum {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
   font-size: 20px;
+  color: #26ee00;
 }
 
-.friends {
+.breadcrum-l:hover {
+  text-decoration: underline;
+  color: #216713;
+}
+
+.game-details {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 20px;
 }
 
-.friend {
-  padding-top: 5px;
-  padding: 3px;
+.game-name {
+  color: white;
+  font-size: 30px;
+} 
+
+.team-info {
   display: flex;
-  align-items: center;
-  gap: 5px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.info h2 {
+  color: #5c5b5b;
+}
+
+.info p {
+  font-size: 16px;
+  color: rgb(214, 214, 214);
+}
+
+.game-categories-section {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 15px;
+}
+
+.game-categorie {
+  padding: 10px;
+  background-color: #202020;
+  font-size: 18px;
+  border-radius: 10px;
+  color: white;
+  transition: all 0.5s ease-in-out;
+}
+
+.game-categorie:hover {
+  background-color: #20c300;
+  color: black;
+}
+
+.game-description {
+  padding-top: 20px;
+}
+
+.game-description p{
+  color: white;
+  font: 18px;
+}
+
+.game-recomended-section {
+  border-radius: 5px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  justify-content: center;
+  background-color: #1a181b;
+}
+
+.recomended-game {
+  height: 100px;
+  border-radius: 10px;
+  transition: all 0.250s ease;
+}
+
+.recomended-game:hover {
+  transform: scale(1.05);
+}
+
+/*--- Configuration ---*/
+.config-section {
+  right: 0; 
+  top: 45px;
+  width: 15%;
+  height: 100vh;
+  background-color: #1a181b;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  border-left: 1px solid black;
+  transition: all 0.5s ease;
+}
+
+.config-section h3 {
+  font-size: 16px;
+  color: #26ee00;
+}
+
+.config-sections {
+  padding-top: 10px;
+  gap: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.c-section {
+  color: white;
   border: 1px solid black;
   border-radius: 5px;
-  overflow-x: hidden;
+  padding: 5px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  transition: all 0.5s ease;
 }
 
-.friend:hover {
-  transform: scale(1.05);
-  transition: 0.250ms ease-in-out;
-}
-
-.friend img {
+.c-section img {
   height: 30px;
   width: auto;
 }
 
-.tag {
-  font-size: 22px;
-  color: #25b00a;
+.c-section:hover {
+  scale: calc(1.05);
+  background-color: #202020;
 }
+
 
 /*========= Ocultos ========*/
 .hamburguer-hidden {
@@ -299,7 +407,7 @@ main {
   opacity: 0;
 }
 
-.friends-hidden {
+.config-hidden {
   transform: translateX(100%);
   width: 0;
   padding: 0;
