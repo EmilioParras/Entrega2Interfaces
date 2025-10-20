@@ -1,44 +1,42 @@
 /*==== Abrir y cerrar paneles laterales===== */
 
-const hamburguerBtn = document.getElementById("hamburguer-button");
-const configBtn = document.getElementById("config-button");
-const hamburguerSection = document.querySelector(".hamburguer-section");
-const configSection = document.querySelector(".config-section");
-const mainContent = document.querySelector("main");
-const footer = document.querySelector(".footer-links-section");
-const rigthsReserved = document.querySelector(".footer-rigths-reserved");
+const hamburguerBtn = document.getElementById("hamburguer-button")
+const configBtn = document.getElementById("config-button")
+const hamburguerSection = document.querySelector(".hamburguer-section")
+const configSection = document.querySelector(".config-section")
+const mainContent = document.querySelector("main")
 
 function updateMainLayout() {
-  const leftVisible = !hamburguerSection.classList.contains("hamburguer-hidden");
-  const rightVisible = !configSection.classList.contains("config-hidden");
+  const leftVisible = !hamburguerSection.classList.contains("hamburguer-hidden")
+  const rightVisible = !configSection.classList.contains("config-hidden")
 
-  mainContent.classList.remove("expand-left", "expand-right", "expand-none", "expand-both");
+  mainContent.classList.remove("expand-left", "expand-right", "expand-none", "expand-both")
 
   if (!leftVisible && !rightVisible) {
-    mainContent.classList.add("expand-none");
-  } else if (!leftVisible && rightVisible) {    
-    mainContent.classList.add("expand-right");
+    mainContent.classList.add("expand-none")
+  } else if (!leftVisible && rightVisible) {
+    mainContent.classList.add("expand-right")
   } else if (leftVisible && !rightVisible) {
-    mainContent.classList.add("expand-left");
-  } else if (leftVisible && rightVisible){
-    mainContent.classList.add("expand-both");
+    mainContent.classList.add("expand-left")
+  } else if (leftVisible && rightVisible) {
+    mainContent.classList.add("expand-both")
   }
 }
 
 hamburguerBtn.addEventListener("click", () => {
-  hamburguerSection.classList.toggle("hamburguer-hidden");
-  updateMainLayout();
-});
+  hamburguerSection.classList.toggle("hamburguer-hidden")
+  updateMainLayout()
+})
 
 configBtn.addEventListener("click", () => {
-  configSection.classList.toggle("config-hidden");
-  updateMainLayout();
-});
+  configSection.classList.toggle("config-hidden")
+  updateMainLayout()
+})
 
-updateMainLayout();
+updateMainLayout()
+
 
 // ==== BLOCKA LOGICA ====
-
 const playButton = document.querySelector(".play-button")
 const gallery = document.querySelector(".gallery")
 const gameNotPlaying = document.querySelector(".game-center-info")
@@ -53,7 +51,6 @@ const imageLevels = [
 ]
 
 let selectedImagePath = ""
-
 let timerInterval = null
 let timeElapsed = 0
 let gameActive = false
@@ -73,7 +70,7 @@ playButton.addEventListener("click", () => {
 
   const images = gallery.querySelectorAll("img")
 
-  let rounds = 15 // cuántas imágenes pasa antes de elegir la final
+  let rounds = 15
   const randomFinal = Math.floor(Math.random() * images.length)
 
   const interval = setInterval(() => {
@@ -82,7 +79,6 @@ playButton.addEventListener("click", () => {
       img.style.opacity = "0.5"
     })
 
-    // Elige una imagen aleatoria para agrandar
     const randomIndex = Math.floor(Math.random() * images.length)
     const selectedImage = images[randomIndex]
     selectedImage.style.transform = "scale(1.3)"
@@ -90,11 +86,9 @@ playButton.addEventListener("click", () => {
 
     rounds--
 
-    // Cuando pasan las 15 rondas
     if (rounds == 0) {
       clearInterval(interval)
 
-      // Resalta la imagen elegida y opaca las otras
       images.forEach((img, i) => {
         if (i === randomFinal) {
           img.style.transition = "all 0.5s ease"
@@ -110,18 +104,16 @@ playButton.addEventListener("click", () => {
 
       selectedImagePath = imageLevels[randomFinal]
 
-      // Después de 3 segundos ocualta la galeria
       setTimeout(() => {
         gallery.classList.add("hidden")
         console.log("Imagen seleccionada:", selectedImagePath)
 
-        // Mostrar la selección de piezas.
         const gamePieces = document.getElementById("game-pieces")
         gamePieces.classList.add("visible")
         gamePieces.classList.remove("hidden")
       }, 3000)
     }
-  }, 300) // Cada 0.300s cambia de imagen.
+  }, 300)
 })
 
 const pieceButtons = document.querySelectorAll(".cant-pieces")
@@ -132,11 +124,9 @@ pieceButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const pieceCount = Number.parseInt(button.textContent)
 
-    // Ocultar la selección de piezas
     gamePiecesSection.classList.add("hidden")
     gamePiecesSection.classList.remove("visible")
 
-    // Mostrar la pantalla de ejecución con la imagen y botón de comenzar
     showPreGameScreen(pieceCount)
   })
 })
@@ -145,7 +135,7 @@ function showPreGameScreen(pieceCount) {
   gameExecutionSection.innerHTML = `
     <div class="game-image-center">
       <img src="${selectedImagePath}" alt="Selected Image">
-      <h2 style="color: white; margin-top: 20px;">Dividir en ${pieceCount} piezas</h2>
+      <h2 style="color: white; margin-top: 20px;">La imagen sera dividida en ${pieceCount} piezas. ¡Suerte!</h2>
       <button class="start-game-button">COMENZAR A JUGAR</button>
     </div>
   `
@@ -153,7 +143,6 @@ function showPreGameScreen(pieceCount) {
   gameExecutionSection.classList.remove("hidden")
   gameExecutionSection.classList.add("visible")
 
-  // Agregar evento al botón de comenzar
   const startButton = gameExecutionSection.querySelector(".start-game-button")
   startButton.addEventListener("click", () => {
     startGame(pieceCount)
@@ -161,9 +150,6 @@ function showPreGameScreen(pieceCount) {
 }
 
 function startGame(pieceCount) {
-  console.log(`[v0] Iniciando juego con ${pieceCount} piezas`)
-
-  // Calcular filas y columnas según la cantidad de piezas
   let rows, cols
   if (pieceCount === 4) {
     rows = 2
@@ -176,7 +162,9 @@ function startGame(pieceCount) {
     cols = 4
   }
 
-  console.log(`[v0] Grid: ${cols} columnas x ${rows} filas`)
+  const boardWidth = 600
+  const boardHeight = 400
+  const gap = 5
 
   gameExecutionSection.innerHTML = `
     <div class="game-timer" id="game-timer">
@@ -188,15 +176,21 @@ function startGame(pieceCount) {
         display: grid;
         grid-template-columns: repeat(${cols}, 1fr);
         grid-template-rows: repeat(${rows}, 1fr);
-        gap: 5px;
-        width: 600px;
-        height: 400px;
+        gap: ${gap}px;
+        width: ${boardWidth}px;
+        height: ${boardHeight}px;
       ">
       </div>
     </div>
   `
 
   const gameBoard = gameExecutionSection.querySelector(".game-board")
+
+  const pieceWidth = (boardWidth - gap * (cols - 1)) / cols
+  const pieceHeight = (boardHeight - gap * (rows - 1)) / rows
+
+  const bgSizeX = (boardWidth / pieceWidth) * 100
+  const bgSizeY = (boardHeight / pieceHeight) * 100
 
   const pieces = []
   for (let row = 0; row < rows; row++) {
@@ -207,55 +201,43 @@ function startGame(pieceCount) {
       const bgPosX = cols > 1 ? (col / (cols - 1)) * 100 : 0
       const bgPosY = rows > 1 ? (row / (rows - 1)) * 100 : 0
 
-      console.log(`[v0] Pieza (${col}, ${row}): bgPos = ${bgPosX}%, ${bgPosY}%`)
-
       piece.style.cssText = `
         border: 2px solid #26EE00;
         border-radius: 5px;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease;
         overflow: hidden;
         position: relative;
+        background-image: url('${selectedImagePath}');
+        background-size: ${bgSizeX}% ${bgSizeY}%;
+        background-position: ${bgPosX}% ${bgPosY}%;
+        background-repeat: no-repeat;
       `
 
-      piece.style.setProperty("--bg-image", `url('${selectedImagePath}')`)
-      piece.style.setProperty("--bg-size-x", `${cols * 100}%`)
-      piece.style.setProperty("--bg-size-y", `${rows * 100}%`)
-      piece.style.setProperty("--bg-pos-x", `${bgPosX}%`)
-      piece.style.setProperty("--bg-pos-y", `${bgPosY}%`)
-      piece.style.setProperty("--rotation", "0deg")
-
-      piece.dataset.correctPosition = pieces.length
       piece.dataset.rotation = 0
-      piece.dataset.correctRotation = 0
+      piece.dataset.originalCol = col
+      piece.dataset.originalRow = row
       pieces.push(piece)
       gameBoard.appendChild(piece)
     }
   }
 
-  console.log(`[v0] Total de piezas creadas: ${pieces.length}`)
-  console.log(`[v0] Background size: ${cols * 100}% x ${rows * 100}%`)
-
-  // Mezclar las piezas
   shufflePieces(pieces, gameBoard)
-
   startTimer()
 
   pieces.forEach((piece) => {
-    // Click izquierdo - rotar a la izquierda
     piece.addEventListener("click", (e) => {
       e.preventDefault()
       if (!gameActive) return
       rotatePiece(piece, -90)
-      checkWin(pieces, rows, cols)
+      checkWin(piece)
     })
 
-    // Click derecho - rotar a la derecha
     piece.addEventListener("contextmenu", (e) => {
       e.preventDefault()
       if (!gameActive) return
       rotatePiece(piece, 90)
-      checkWin(pieces, rows, cols)
+      checkWin(pieces)
     })
   })
 }
@@ -264,15 +246,7 @@ function rotatePiece(piece, degrees) {
   const currentRotation = Number.parseInt(piece.dataset.rotation) || 0
   const newRotation = (currentRotation + degrees) % 360
   piece.dataset.rotation = newRotation
-
-  // Aplicar rotación solo al background
-  const currentStyle = piece.style.cssText
-  const bgImage = piece.style.backgroundImage
-  const bgSize = piece.style.backgroundSize
-  const bgPosition = piece.style.backgroundPosition
-
-  // Crear un pseudo-elemento para rotar solo el fondo
-  piece.style.setProperty("--rotation", `${newRotation}deg`)
+  piece.style.transform = `rotate(${newRotation}deg)`
 }
 
 function startTimer() {
@@ -309,7 +283,6 @@ function showGameOver(won) {
   stopTimer()
 
   const message = won ? "¡Felicidades! Has completado el puzzle 🎉" : "¡Tiempo agotado! Has perdido 😢"
-
   const messageColor = won ? "#26EE00" : "#ff0000"
 
   gameExecutionSection.innerHTML = `
@@ -326,41 +299,29 @@ function shufflePieces(pieces, container) {
   shuffled.forEach((piece) => {
     const randomRotation = [0, 90, 180, 270][Math.floor(Math.random() * 4)]
     piece.dataset.rotation = randomRotation
-    piece.style.setProperty("--rotation", `${randomRotation}deg`)
+    piece.style.transform = `rotate(${randomRotation}deg)`
     container.appendChild(piece)
   })
 }
 
-function swapPieces(piece1, piece2) {
-  const tempBackground = piece1.style.backgroundPosition
-  piece1.style.backgroundPosition = piece2.style.backgroundPosition
-  piece2.style.backgroundPosition = tempBackground
-
-  const tempCorrect = piece1.dataset.correctPosition
-  piece1.dataset.correctPosition = piece2.dataset.correctPosition
-  piece2.dataset.correctPosition = tempCorrect
-}
-
-function checkWin(pieces, rows, cols) {
-  const isComplete = pieces.every((piece, index) => {
-    const correctPosition = Number.parseInt(piece.dataset.correctPosition) === index
-    const correctRotation = Number.parseInt(piece.dataset.rotation) === Number.parseInt(piece.dataset.correctRotation)
-    return correctPosition && correctRotation
+function checkWin(pieces) {
+  const isComplete = pieces.every((piece) => {
+    const rotation = Number.parseInt(piece.dataset.rotation)
+    const normalizedRotation = ((rotation % 360) + 360) % 360
+    return normalizedRotation === 0
   })
 
   if (isComplete) {
     stopTimer()
 
-    // Unificar la imagen eliminando bordes y gaps
     const gameBoard = document.querySelector(".game-board")
     gameBoard.style.gap = "0px"
 
     pieces.forEach((piece) => {
       piece.style.border = "none"
-      piece.style.setProperty("--rotation", "0deg")
+      piece.style.transform = "rotate(0deg)"
     })
 
-    // Después de 5 segundos, mostrar mensaje de victoria
     setTimeout(() => {
       showGameOver(true)
     }, 5000)
