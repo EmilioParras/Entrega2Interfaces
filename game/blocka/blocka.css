@@ -404,19 +404,16 @@ main {
 
 /* Galeria de imagenes*/
 .gallery {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(29, 26, 26, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  transition: all 0.5s ease;
-  z-index: 50;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(29, 26, 26, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    transition: all 0.5s ease;
+    z-index: 50;
 }
 
 .gallery img {

@@ -40,6 +40,7 @@ updateMainLayout()
 const playButton = document.querySelector(".play-button")
 const gallery = document.querySelector(".gallery")
 const gameNotPlaying = document.querySelector(".game-center-info")
+const fullScreenButton = document.getElementById("button-fullScreen")
 
 const imageLevels = [
   "images/imageLevels/imageLvl1.jpg",
@@ -67,8 +68,8 @@ let cols = 0
 let pieceWidth = 0
 let pieceHeight = 0
 const gap = 5
-const boardWidth = 400
-const boardHeight = 400
+let boardWidth = 400
+let boardHeight = 400
 
 // Mostrar galería al hacer click en "JUGAR"
 playButton.addEventListener("click", () => {
@@ -174,12 +175,18 @@ function startGame(pieceCount) {
   if (pieceCount === 4) {
     rows = 2
     cols = 2
+    boardWidth = 400
+    boardHeight = 400
   } else if (pieceCount === 6) {
     rows = 2
     cols = 3
+    boardWidth = 600
+    boardHeight = 400
   } else if (pieceCount === 8) {
     rows = 2
     cols = 4
+    boardWidth = 800
+    boardHeight = 400
   }
 
   pieceWidth = (boardWidth - gap * (cols - 1)) / cols
@@ -510,3 +517,15 @@ function showGameOver(won) {
     }, 300)
   })
 }
+
+fullScreenButton.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch((err) => {
+      console.error("Error al intentar entrar en fullscreen:", err)
+    })
+  } else {
+    document.exitFullscreen().catch((err) => {
+      console.error("Error al intentar salir de fullscreen:", err)
+    })
+  }
+})
