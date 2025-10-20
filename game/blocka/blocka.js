@@ -40,7 +40,6 @@ updateMainLayout()
 const playButton = document.querySelector(".play-button")
 const gallery = document.querySelector(".gallery")
 const gameNotPlaying = document.querySelector(".game-center-info")
-const fullScreenButton = document.getElementById("button-fullScreen")
 
 const imageLevels = [
   "images/imageLevels/imageLvl1.jpg",
@@ -68,7 +67,7 @@ let cols = 0
 let pieceWidth = 0
 let pieceHeight = 0
 const gap = 5
-let boardWidth = 400
+let boardWidth = 600
 let boardHeight = 400
 
 // Mostrar galería al hacer click en "JUGAR"
@@ -376,6 +375,11 @@ function stopTimer() {
 }
 
 function shufflePieces() {
+  for (let i = pieces.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[pieces[i], pieces[j]] = [pieces[j], pieces[i]]
+  }
+
   pieces.forEach((piece) => {
     piece.rotation = [0, 90, 180, 270][Math.floor(Math.random() * 4)]
   })
@@ -518,14 +522,115 @@ function showGameOver(won) {
   })
 }
 
-fullScreenButton.addEventListener("click", () => {
+const fullscreenButton = document.getElementById("button-fullScreen")
+const controlsButton = document.getElementById("button-controls")
+let controlsPopover = null
+
+fullscreenButton.addEventListener("click", () => {
   if (!document.fullscreenElement) {
+    // Enter fullscreen
     document.documentElement.requestFullscreen().catch((err) => {
       console.error("Error al intentar entrar en fullscreen:", err)
     })
   } else {
+    // Exit fullscreen
     document.exitFullscreen().catch((err) => {
       console.error("Error al intentar salir de fullscreen:", err)
     })
   }
 })
+
+controlsButton.addEventListener("click", (e) => {
+  e.stopPropagation()
+
+  // Si el popover ya existe, lo eliminamos (toggle)
+  if (controlsPopover) {
+    controlsPopover.remove()
+    controlsPopover = null
+    const overlay = document.getElementById("controls-overlay")
+    if (overlay) overlay.remove()
+    return
+  }
+
+  const overlay = document.createElement("div")
+  overlay.id = "controls-overlay"
+  overlay.style.position = "fixed"
+  overlay.style.top = "0"
+  overlay.style.left = "0"
+  overlay.style.width = "100%"
+  overlay.style.height = "100%"
+  overlay.style.backgroundColor = "rgba(0, 0, 0, 0.7)"
+  overlay.style.zIndex = "999"
+  document.body.appendChild(overlay)
+
+  // Crear el popover
+  controlsPopover = document.createElement("div")
+  controlsPopover.className = "controls-popover"
+  controlsPopover.innerHTML = `
+    <div class="controls-popover-header">
+      <h3>Cómo Jugar</h3>
+      <button class="controls-close-btn">&times;</button>
+    </div>
+    <div class="controls-popover-content">
+      <div class="control-item">
+        <span class="control-icon">🖱️</span>
+        <div>
+          <strong>Click Izquierdo:</strong>
+          <p>Rotar pieza en sentido antihorario (-90°)</p>
+        </div>
+      </div>
+      <div class="control-item">
+        <span class="control-icon">🖱️</span>
+        <div>
+          <strong>Click Derecho:</strong>
+          <p>Rotar pieza en sentido horario (+90°)</p>
+        </div>
+      </div>
+      <div class="control-item">
+        <span class="control-icon">💡</span>
+        <div>
+          <strong>Botón de Ayuda:</strong>
+          <p>Corrige automáticamente una pieza incorrecta. Suma 5 segundos al tiempo. Solo se puede usar una vez.</p>
+        </div>
+      </div>
+      <div class="control-item">
+        <span class="control-icon">🎯</span>
+        <div>
+          <strong>Objetivo:</strong>
+          <p>Rotar todas las piezas a su posición correcta (0°) antes de que se acabe el tiempo (60 segundos).</p>
+        </div>
+      </div>
+    </div>
+  `
+
+  document.body.appendChild(controlsPopover)
+
+  // Cerrar al hacer click en el botón de cerrar
+  const closeBtn = controlsPopover.querySelector(".controls-close-btn")
+  closeBtn.addEventListener("click", () => {
+    controlsPopover.remove()
+    controlsPopover = null
+    overlay.remove()
+  })
+
+  overlay.addEventListener("click", () => {
+    controlsPopover.remove()
+    controlsPopover = null
+    overlay.remove()
+  })
+
+  // Cerrar al hacer click fuera del popover
+  setTimeout(() => {
+    document.addEventListener("click", closePopoverOutside)
+  }, 0)
+})
+
+function closePopoverOutside(e) {
+  if (controlsPopover && !controlsPopover.contains(e.target) && e.target !== controlsButton) {
+    controlsPopover.remove()
+    controlsPopover = null
+    const overlay = document.getElementById("controls-overlay")
+    if (overlay) overlay.remove()
+    document.removeEventListener("click", closePopoverOutside)
+  }
+}
