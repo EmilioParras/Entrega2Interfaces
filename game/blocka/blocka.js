@@ -375,11 +375,6 @@ function stopTimer() {
 }
 
 function shufflePieces() {
-  for (let i = pieces.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[pieces[i], pieces[j]] = [pieces[j], pieces[i]]
-  }
-
   pieces.forEach((piece) => {
     piece.rotation = [0, 90, 180, 270][Math.floor(Math.random() * 4)]
   })
