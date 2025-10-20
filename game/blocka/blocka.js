@@ -35,8 +35,8 @@ configBtn.addEventListener("click", () => {
 
 updateMainLayout()
 
+// ==== BLOCKA LOGICA CON CANVAS ====
 
-// ==== BLOCKA LOGICA ====
 const playButton = document.querySelector(".play-button")
 const gallery = document.querySelector(".gallery")
 const gameNotPlaying = document.querySelector(".game-center-info")
@@ -51,9 +51,24 @@ const imageLevels = [
 ]
 
 let selectedImagePath = ""
+let selectedImage = null
 let timerInterval = null
 let timeElapsed = 0
 let gameActive = false
+let helpUsed = false
+let selectedFilter = "none"
+
+// Variables del canvas
+let canvas = null
+let ctx = null
+let pieces = []
+let rows = 0
+let cols = 0
+let pieceWidth = 0
+let pieceHeight = 0
+const gap = 5
+const boardWidth = 400
+const boardHeight = 400
 
 // Mostrar galería al hacer click en "JUGAR"
 playButton.addEventListener("click", () => {
@@ -80,13 +95,13 @@ playButton.addEventListener("click", () => {
     })
 
     const randomIndex = Math.floor(Math.random() * images.length)
-    const selectedImage = images[randomIndex]
-    selectedImage.style.transform = "scale(1.3)"
-    selectedImage.style.opacity = "1"
+    const selectedImageEl = images[randomIndex]
+    selectedImageEl.style.transform = "scale(1.3)"
+    selectedImageEl.style.opacity = "1"
 
     rounds--
 
-    if (rounds == 0) {
+    if (rounds === 0) {
       clearInterval(interval)
 
       images.forEach((img, i) => {
@@ -134,8 +149,8 @@ pieceButtons.forEach((button) => {
 function showPreGameScreen(pieceCount) {
   gameExecutionSection.innerHTML = `
     <div class="game-image-center">
-      <img src="${selectedImagePath}" alt="Selected Image">
-      <h2 style="color: white; margin-top: 20px;">La imagen sera dividida en ${pieceCount} piezas. ¡Suerte!</h2>
+      <img src="${selectedImagePath}" alt="Selected Image" id="preview-image">
+      <h2 style="color: white; margin-top: 20px;">Dividir en ${pieceCount} piezas</h2>
       <button class="start-game-button">COMENZAR A JUGAR</button>
     </div>
   `
@@ -150,7 +165,12 @@ function showPreGameScreen(pieceCount) {
 }
 
 function startGame(pieceCount) {
-  let rows, cols
+  helpUsed = false
+
+  const availableFilters = ["none", "grayscale(100%)", "brightness(130%)", "invert(100%)"]
+  selectedFilter = availableFilters[Math.floor(Math.random() * availableFilters.length)]
+  console.log("Filtro aplicado:", selectedFilter)
+
   if (pieceCount === 4) {
     rows = 2
     cols = 2
@@ -162,91 +182,160 @@ function startGame(pieceCount) {
     cols = 4
   }
 
-  const boardWidth = 600
-  const boardHeight = 400
-  const gap = 5
+  pieceWidth = (boardWidth - gap * (cols - 1)) / cols
+  pieceHeight = (boardHeight - gap * (rows - 1)) / rows
 
   gameExecutionSection.innerHTML = `
-    <div class="game-timer" id="game-timer">
-      <span class="timer-label">Tiempo:</span>
-      <span class="timer-value" id="timer-value">0</span>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="game-timer" id="game-timer">
+        <span class="timer-label">Tiempo:</span>
+        <span class="timer-value" id="timer-value">0</span>
+      </div>
+      <div class="help-button-section">
+        <span class="help-button" id="help-button"><img src="./images/Icons/ayudaJuego.png"></span>
+      </div>
     </div>
     <div class="game-board-container">
-      <div class="game-board" style="
-        display: grid;
-        grid-template-columns: repeat(${cols}, 1fr);
-        grid-template-rows: repeat(${rows}, 1fr);
-        gap: ${gap}px;
-        width: ${boardWidth}px;
-        height: ${boardHeight}px;
-      ">
-      </div>
+      <canvas id="game-canvas" width="${boardWidth}" height="${boardHeight}" style="border: 2px solid #26EE00; border-radius: 10px; cursor: pointer;"></canvas>
     </div>
   `
 
-  const gameBoard = gameExecutionSection.querySelector(".game-board")
+  canvas = document.getElementById("game-canvas")
+  ctx = canvas.getContext("2d")
 
-  const pieceWidth = (boardWidth - gap * (cols - 1)) / cols
-  const pieceHeight = (boardHeight - gap * (rows - 1)) / rows
+  const helpButton = document.getElementById("help-button")
+  helpButton.addEventListener("click", useHelp)
 
-  const bgSizeX = (boardWidth / pieceWidth) * 100
-  const bgSizeY = (boardHeight / pieceHeight) * 100
+  selectedImage = new Image()
+  selectedImage.crossOrigin = "anonymous"
+  selectedImage.onload = () => {
+    initializePieces()
+    shufflePieces()
+    drawBoard()
+    startTimer()
+  }
+  selectedImage.src = selectedImagePath
 
-  const pieces = []
+  canvas.addEventListener("click", handleCanvasClick)
+  canvas.addEventListener("contextmenu", handleCanvasRightClick)
+}
+
+function initializePieces() {
+  pieces = []
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const piece = document.createElement("div")
-      piece.className = "puzzle-piece"
-
-      const bgPosX = cols > 1 ? (col / (cols - 1)) * 100 : 0
-      const bgPosY = rows > 1 ? (row / (rows - 1)) * 100 : 0
-
-      piece.style.cssText = `
-        border: 2px solid #26EE00;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-        overflow: hidden;
-        position: relative;
-        background-image: url('${selectedImagePath}');
-        background-size: ${bgSizeX}% ${bgSizeY}%;
-        background-position: ${bgPosX}% ${bgPosY}%;
-        background-repeat: no-repeat;
-      `
-
-      piece.dataset.rotation = 0
-      piece.dataset.originalCol = col
-      piece.dataset.originalRow = row
-      pieces.push(piece)
-      gameBoard.appendChild(piece)
+      pieces.push({
+        originalRow: row,
+        originalCol: col,
+        rotation: 0,
+        gridIndex: pieces.length,
+        locked: false,
+      })
     }
   }
+}
 
-  shufflePieces(pieces, gameBoard)
-  startTimer()
+function drawBoard() {
+  ctx.clearRect(0, 0, boardWidth, boardHeight)
 
-  pieces.forEach((piece) => {
-    piece.addEventListener("click", (e) => {
-      e.preventDefault()
-      if (!gameActive) return
-      rotatePiece(piece, -90)
-      checkWin(piece)
-    })
+  pieces.forEach((piece, index) => {
+    const gridRow = Math.floor(index / cols)
+    const gridCol = index % cols
 
-    piece.addEventListener("contextmenu", (e) => {
-      e.preventDefault()
-      if (!gameActive) return
-      rotatePiece(piece, 90)
-      checkWin(pieces)
-    })
+    const x = gridCol * (pieceWidth + gap)
+    const y = gridRow * (pieceHeight + gap)
+
+    drawPiece(piece, x, y)
   })
 }
 
-function rotatePiece(piece, degrees) {
-  const currentRotation = Number.parseInt(piece.dataset.rotation) || 0
-  const newRotation = (currentRotation + degrees) % 360
-  piece.dataset.rotation = newRotation
-  piece.style.transform = `rotate(${newRotation}deg)`
+function drawPiece(piece, x, y) {
+  ctx.save()
+
+  ctx.translate(x + pieceWidth / 2, y + pieceHeight / 2)
+  ctx.rotate((piece.rotation * Math.PI) / 180)
+
+  ctx.strokeStyle = piece.locked ? "#FFD700" : "#26EE00"
+  ctx.lineWidth = 2
+  ctx.strokeRect(-pieceWidth / 2, -pieceHeight / 2, pieceWidth, pieceHeight)
+
+  if (selectedFilter !== "none") {
+    ctx.filter = selectedFilter
+  }
+
+  const sourceX = piece.originalCol * (selectedImage.width / cols)
+  const sourceY = piece.originalRow * (selectedImage.height / rows)
+  const sourceWidth = selectedImage.width / cols
+  const sourceHeight = selectedImage.height / rows
+
+  ctx.drawImage(
+    selectedImage,
+    sourceX,
+    sourceY,
+    sourceWidth,
+    sourceHeight,
+    -pieceWidth / 2,
+    -pieceHeight / 2,
+    pieceWidth,
+    pieceHeight,
+  )
+
+  ctx.filter = "none"
+
+  ctx.restore()
+}
+
+function handleCanvasClick(e) {
+  if (!gameActive) return
+
+  const rect = canvas.getBoundingClientRect()
+  const mouseX = e.clientX - rect.left
+  const mouseY = e.clientY - rect.top
+
+  const pieceIndex = getPieceAtPosition(mouseX, mouseY)
+  if (pieceIndex !== -1) {
+    if (pieces[pieceIndex].locked) {
+      return
+    }
+    rotatePiece(pieceIndex, -90)
+    drawBoard()
+    checkWin()
+  }
+}
+
+function handleCanvasRightClick(e) {
+  e.preventDefault()
+  if (!gameActive) return
+
+  const rect = canvas.getBoundingClientRect()
+  const mouseX = e.clientX - rect.left
+  const mouseY = e.clientY - rect.top
+
+  const pieceIndex = getPieceAtPosition(mouseX, mouseY)
+  if (pieceIndex !== -1) {
+    if (pieces[pieceIndex].locked) {
+      return
+    }
+    rotatePiece(pieceIndex, 90)
+    drawBoard()
+    checkWin()
+  }
+}
+
+function getPieceAtPosition(x, y) {
+  const col = Math.floor(x / (pieceWidth + gap))
+  const row = Math.floor(y / (pieceHeight + gap))
+
+  if (col >= 0 && col < cols && row >= 0 && row < rows) {
+    return row * cols + col
+  }
+  return -1
+}
+
+function rotatePiece(index, degrees) {
+  const piece = pieces[index]
+  piece.rotation = (piece.rotation + degrees) % 360
+  if (piece.rotation < 0) piece.rotation += 360
 }
 
 function startTimer() {
@@ -279,6 +368,66 @@ function stopTimer() {
   gameActive = false
 }
 
+function shufflePieces() {
+  pieces.forEach((piece) => {
+    piece.rotation = [0, 90, 180, 270][Math.floor(Math.random() * 4)]
+  })
+}
+
+function checkWin() {
+  const isComplete = pieces.every((piece) => {
+    const normalizedRotation = ((piece.rotation % 360) + 360) % 360
+    return normalizedRotation === 0
+  })
+
+  if (isComplete) {
+    stopTimer()
+
+    setTimeout(() => {
+      canvas.width = boardWidth
+      canvas.height = boardHeight
+      if (selectedFilter !== "none") {
+        ctx.filter = selectedFilter
+      }
+      ctx.drawImage(selectedImage, 0, 0, boardWidth, boardHeight)
+      ctx.filter = "none"
+
+      setTimeout(() => {
+        showGameOver(true)
+      }, 3000)
+    }, 500)
+  }
+}
+
+function useHelp() {
+  if (helpUsed || !gameActive) return
+
+  const incorrectPiece = pieces.find((piece) => {
+    const normalizedRotation = ((piece.rotation % 360) + 360) % 360
+    return normalizedRotation !== 0
+  })
+
+  if (!incorrectPiece) {
+    return
+  }
+
+  incorrectPiece.rotation = 0
+  incorrectPiece.locked = true
+
+  timeElapsed += 5
+  const timerValue = document.getElementById("timer-value")
+  timerValue.textContent = timeElapsed
+
+  helpUsed = true
+  const helpButton = document.getElementById("help-button")
+  helpButton.style.opacity = "0.3"
+  helpButton.style.cursor = "not-allowed"
+  helpButton.style.pointerEvents = "none"
+
+  drawBoard()
+  checkWin()
+}
+
 function showGameOver(won) {
   stopTimer()
 
@@ -288,42 +437,76 @@ function showGameOver(won) {
   gameExecutionSection.innerHTML = `
     <div class="game-over-screen">
       <h1 style="color: ${messageColor}; font-size: 48px; text-align: center;">${message}</h1>
-      <button class="start-game-button" onclick="location.reload()">JUGAR DE NUEVO</button>
+      <button class="start-game-button" id="play-again-button">JUGAR DE NUEVO</button>
     </div>
   `
-}
 
-function shufflePieces(pieces, container) {
-  const shuffled = [...pieces].sort(() => Math.random() - 0.5)
-  container.innerHTML = ""
-  shuffled.forEach((piece) => {
-    const randomRotation = [0, 90, 180, 270][Math.floor(Math.random() * 4)]
-    piece.dataset.rotation = randomRotation
-    piece.style.transform = `rotate(${randomRotation}deg)`
-    container.appendChild(piece)
-  })
-}
+  const playAgainButton = document.getElementById("play-again-button")
+  playAgainButton.addEventListener("click", () => {
+    selectedImagePath = ""
+    selectedImage = null
+    timeElapsed = 0
+    gameActive = false
+    helpUsed = false
+    selectedFilter = "none"
+    pieces = []
 
-function checkWin(pieces) {
-  const isComplete = pieces.every((piece) => {
-    const rotation = Number.parseInt(piece.dataset.rotation)
-    const normalizedRotation = ((rotation % 360) + 360) % 360
-    return normalizedRotation === 0
-  })
+    gameExecutionSection.classList.add("hidden")
+    gameExecutionSection.classList.remove("visible")
 
-  if (isComplete) {
-    stopTimer()
+    gallery.innerHTML = ""
+    gallery.classList.remove("hidden")
+    gameNotPlaying.classList.add("hidden")
 
-    const gameBoard = document.querySelector(".game-board")
-    gameBoard.style.gap = "0px"
-
-    pieces.forEach((piece) => {
-      piece.style.border = "none"
-      piece.style.transform = "rotate(0deg)"
+    imageLevels.forEach((path) => {
+      const img = document.createElement("img")
+      img.src = path
+      img.alt = "level image"
+      gallery.appendChild(img)
     })
 
-    setTimeout(() => {
-      showGameOver(true)
-    }, 5000)
-  }
+    const images = gallery.querySelectorAll("img")
+    let rounds = 15
+    const randomFinal = Math.floor(Math.random() * images.length)
+
+    const interval = setInterval(() => {
+      images.forEach((img) => {
+        img.style.transform = "scale(1)"
+        img.style.opacity = "0.5"
+      })
+
+      const randomIndex = Math.floor(Math.random() * images.length)
+      const selectedImageEl = images[randomIndex]
+      selectedImageEl.style.transform = "scale(1.3)"
+      selectedImageEl.style.opacity = "1"
+
+      rounds--
+
+      if (rounds === 0) {
+        clearInterval(interval)
+
+        images.forEach((img, i) => {
+          if (i === randomFinal) {
+            img.style.transition = "all 0.5s ease"
+            img.style.transform = "scale(1.8)"
+            img.style.filter = "brightness(1.4)"
+            img.style.boxShadow = "0 0 40px 10px rgba(255, 255, 255, 0.8)"
+            img.style.zIndex = "10"
+          } else {
+            img.style.opacity = "0"
+            img.style.transition = "opacity 0.5s ease"
+          }
+        })
+
+        selectedImagePath = imageLevels[randomFinal]
+
+        setTimeout(() => {
+          gallery.classList.add("hidden")
+          const gamePieces = document.getElementById("game-pieces")
+          gamePieces.classList.add("visible")
+          gamePieces.classList.remove("hidden")
+        }, 3000)
+      }
+    }, 300)
+  })
 }
