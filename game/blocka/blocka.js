@@ -538,7 +538,6 @@ fullscreenButton.addEventListener("click", () => {
 controlsButton.addEventListener("click", (e) => {
   e.stopPropagation()
 
-  // Si el popover ya existe, lo eliminamos (toggle)
   if (controlsPopover) {
     controlsPopover.remove()
     controlsPopover = null
@@ -568,33 +567,34 @@ controlsButton.addEventListener("click", (e) => {
     </div>
     <div class="controls-popover-content">
       <div class="control-item">
+        <span class="control-icon">🎯</span>
+        <div>
+          <strong>Objetivo:</strong>
+          <p>Rotar las piezas a su forma correcta antes de que se acabe el tiempo.</p>
+        </div>
+      </div>
+      <div class="control-item">
         <span class="control-icon">🖱️</span>
         <div>
           <strong>Click Izquierdo:</strong>
-          <p>Rotar pieza en sentido antihorario (-90°)</p>
+          <p>Rotar pieza a la izquierda.</p>
         </div>
       </div>
       <div class="control-item">
         <span class="control-icon">🖱️</span>
         <div>
           <strong>Click Derecho:</strong>
-          <p>Rotar pieza en sentido horario (+90°)</p>
+          <p>Rotar pieza a la derecha.</p>
         </div>
       </div>
       <div class="control-item">
         <span class="control-icon">💡</span>
         <div>
           <strong>Botón de Ayuda:</strong>
-          <p>Corrige automáticamente una pieza incorrecta. Suma 5 segundos al tiempo. Solo se puede usar una vez.</p>
+          <p>Ubica una pieza de forma correcta. Suma 5s al tiempo.</p>
         </div>
       </div>
-      <div class="control-item">
-        <span class="control-icon">🎯</span>
-        <div>
-          <strong>Objetivo:</strong>
-          <p>Rotar todas las piezas a su posición correcta (0°) antes de que se acabe el tiempo (60 segundos).</p>
-        </div>
-      </div>
+
     </div>
   `
 
