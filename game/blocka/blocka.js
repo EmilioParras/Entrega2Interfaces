@@ -41,6 +41,7 @@ const playButton = document.querySelector(".play-button")
 const gallery = document.querySelector(".gallery")
 const gameNotPlaying = document.querySelector(".game-center-info")
 
+// Imagenes posibles para jugar
 const imageLevels = [
   "images/imageLevels/imageLvl1.jpg",
   "images/imageLevels/imageLvl2.jpeg",
@@ -50,13 +51,13 @@ const imageLevels = [
   "images/imageLevels/imageLvl6.jpg",
 ]
 
-let selectedImagePath = ""
-let selectedImage = null
-let timerInterval = null
-let timeElapsed = 0
-let gameActive = false
-let helpUsed = false
-let selectedFilter = "none"
+let selectedImagePath = "" // Imagen final la cual sera usada en el juego
+let selectedImage = null // Imagen seleccionada en la galeria
+let timerInterval = null // // Guarda el id numerico. Necesario ya que seguria sumando segundos en el contador si el juego termina o se reinicia.
+let timeElapsed = 0 // Tiempo de juego
+let gameActive = false // Juego en curso
+let helpUsed = false // Uso ayudin
+let selectedFilter = "none" // Filtro en de la imagen
 
 // Variables del canvas
 let canvas = null
@@ -131,9 +132,9 @@ playButton.addEventListener("click", () => {
   }, 300)
 })
 
-const pieceButtons = document.querySelectorAll(".cant-pieces")
-const gamePiecesSection = document.getElementById("game-pieces")
 const gameExecutionSection = document.getElementById("game-execution")
+const gamePiecesSection = document.getElementById("game-pieces")
+const pieceButtons = document.querySelectorAll(".cant-pieces")
 
 pieceButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -150,7 +151,7 @@ function showPreGameScreen(pieceCount) {
   gameExecutionSection.innerHTML = `
     <div class="game-image-center">
       <img src="${selectedImagePath}" alt="Selected Image" id="preview-image">
-      <h2 style="color: white; margin-top: 20px;">Dividir en ${pieceCount} piezas</h2>
+      <h2 style="color: white; margin-top: 20px;">La imagen sera dividida en ${pieceCount} piezas. ¡Suerte!</h2>
       <button class="start-game-button">COMENZAR A JUGAR</button>
     </div>
   `
@@ -165,8 +166,8 @@ function showPreGameScreen(pieceCount) {
 }
 
 function startGame(pieceCount) {
+  
   helpUsed = false
-
   const availableFilters = ["none", "grayscale(100%)", "brightness(130%)", "invert(100%)"]
   selectedFilter = availableFilters[Math.floor(Math.random() * availableFilters.length)]
   console.log("Filtro aplicado:", selectedFilter)
@@ -291,6 +292,7 @@ function drawPiece(piece, x, y) {
   ctx.restore()
 }
 
+//Rotar imagen a la izquierdar
 function handleCanvasClick(e) {
   if (!gameActive) return
 
@@ -309,6 +311,7 @@ function handleCanvasClick(e) {
   }
 }
 
+//Rotar imagen a la derecha
 function handleCanvasRightClick(e) {
   e.preventDefault()
   if (!gameActive) return
@@ -366,6 +369,7 @@ function startTimer() {
   }, 1000)
 }
 
+// Frena el reloj
 function stopTimer() {
   if (timerInterval) {
     clearInterval(timerInterval)
@@ -374,6 +378,7 @@ function stopTimer() {
   gameActive = false
 }
 
+//Cambia la rotacion de las piezas al inciiar el juego.
 function shufflePieces() {
   pieces.forEach((piece) => {
     piece.rotation = [0, 90, 180, 270][Math.floor(Math.random() * 4)]
@@ -447,6 +452,7 @@ function showGameOver(won) {
     </div>
   `
 
+  // Resetea los valores antes de volver a jugar.
   const playAgainButton = document.getElementById("play-again-button")
   playAgainButton.addEventListener("click", () => {
     selectedImagePath = ""
@@ -521,6 +527,7 @@ const fullscreenButton = document.getElementById("button-fullScreen")
 const controlsButton = document.getElementById("button-controls")
 let controlsPopover = null
 
+// Entra en fullscreen
 fullscreenButton.addEventListener("click", () => {
   if (!document.fullscreenElement) {
     // Enter fullscreen
@@ -535,6 +542,7 @@ fullscreenButton.addEventListener("click", () => {
   }
 })
 
+// Crear el popover
 controlsButton.addEventListener("click", (e) => {
   e.stopPropagation()
 
@@ -557,7 +565,6 @@ controlsButton.addEventListener("click", (e) => {
   overlay.style.zIndex = "999"
   document.body.appendChild(overlay)
 
-  // Crear el popover
   controlsPopover = document.createElement("div")
   controlsPopover.className = "controls-popover"
   controlsPopover.innerHTML = `
@@ -608,18 +615,19 @@ controlsButton.addEventListener("click", (e) => {
     overlay.remove()
   })
 
+  // Cerrar al hacer click fuera del popover
   overlay.addEventListener("click", () => {
     controlsPopover.remove()
     controlsPopover = null
     overlay.remove()
   })
 
-  // Cerrar al hacer click fuera del popover
   setTimeout(() => {
     document.addEventListener("click", closePopoverOutside)
   }, 0)
 })
 
+// Cierra el popover al ahcer click fuera de el
 function closePopoverOutside(e) {
   if (controlsPopover && !controlsPopover.contains(e.target) && e.target !== controlsButton) {
     controlsPopover.remove()
